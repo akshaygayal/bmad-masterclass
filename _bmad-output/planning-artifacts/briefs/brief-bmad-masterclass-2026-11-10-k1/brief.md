@@ -5,7 +5,7 @@ approved: '2026-11-10'
 approved_by: 'AkshayGayal'
 created: '2026-11-10'
 updated: '2026-11-10'
-supersedes: 'K5 brief (planning-artifacts/briefs/brief-bmad-masterclass-2026-11-10/)'
+supersedes: 'Earlier K5 Knowledge Readiness brief (2026-11-10), retained privately and not published'
 ---
 
 # Product Brief: Requirements Interpretation Alignment (working title)

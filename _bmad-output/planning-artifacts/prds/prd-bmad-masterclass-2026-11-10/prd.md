@@ -112,9 +112,9 @@ All people, companies and stories below are **fictional** and are used only to m
 > **Q3** Aligned · coverage 2/3 (QA: *Not submitted*).
 > **Q4** Unanswered → **Open**. Follow-up owner: Maya Chen · coverage 3/3 (all *Can't answer*).
 
-#### UJ-2. Akshay demonstrates the workflow alone in under three minutes
+#### UJ-2. Maya's workflow, demonstrated alone in under three minutes
 
-The portfolio author opens the **clearly labelled demo** with a known fictional dataset (the Brightleaf story above). He switches between the fictional Product, Development and QA participants and the facilitator. The **same visibility, reveal and locking rules** apply: while acting as Development, he cannot see QA's hidden answers. He reveals, classifies, records Daniel's reported decision, leaves Q4 open and shows the summary. Every screen in the demo is visibly marked as fictional demo data.
+One person opens the **clearly labelled demo** with a known fictional dataset (the Brightleaf story above). They act as Maya (facilitator, holding Product) and switch to the fictional Development and QA participants, Arjun and Lena. The **same visibility, reveal and locking rules** apply: while acting as Arjun, they cannot see Lena's hidden answers. As Maya, they reveal, classify, record Daniel's reported decision, leave Q4 open and show the summary. Every screen in the demo is visibly marked as fictional demo data.
 
 ## 3. Glossary
 

@@ -193,7 +193,7 @@ Fictional cast: Maya Chen (facilitator + Product), Arjun Rao (Development), Lena
 7. **Q4** (follow-up question added by Lena after the Q2 reveal): all three gave Can't answer → reveal → Unanswered → *Keep open*, follow-up owner Maya Chen.
 8. **S4:** decision summary → *Copy as Markdown*.
 
-### UJ-2 (PRD): Akshay demonstrates the workflow alone (~2:40)
+### UJ-2 (PRD): Maya's workflow, demonstrated alone (~2:40)
 Starting state (FR-23 reset): Q1–Q3 answered (QA missing on Q3); Q4 pre-existing as a follow-up question, Hidden, with three Can't answer responses; nothing revealed.
 
 | Time | Acting as | Beat |
