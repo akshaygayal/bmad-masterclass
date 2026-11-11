@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Review Q2 · Alignment session (UX mockup B)</title>
+<style>
+:root{--canvas:#F4F6F7;--surface:#FFFFFF;--subtle:#F7F9FA;--border:#D5DBDF;--border-strong:#7A858D;--text:#1C2328;--muted:#4D5861;--accent:#0B6B57;--accent-h:#09584A;--accent-s:#E6F2EF;--att:#8A4B0F;--att-s:#FBEFE3;--err:#A61B1B;--focus:#1D4ED8}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);font:400 15px/24px Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.note{background:#fff;border-bottom:1px solid var(--border);padding:8px 24px;font-size:13px;line-height:18px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.note fieldset{border:none;margin:0;padding:0;display:flex;gap:12px}.note legend{float:left;margin-right:8px;font-weight:600}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) clamp(600px,60vw,760px);min-height:calc(100vh - 40px)}
+.list{padding:24px;opacity:.85}.mini{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13px;line-height:18px;color:var(--muted)}
+.mini b{color:var(--text)}.mini.current{border:2px solid var(--accent)}
+aside{background:var(--surface);border-left:1px solid var(--border);box-shadow:-6px 0 16px rgba(28,35,40,.06);padding:24px;container-type:inline-size;container-name:panel;overflow-y:auto}
+.ph{display:flex;justify-content:space-between;gap:12px}
+.eyebrow{font-size:13px;line-height:18px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px}
+h2{font-size:18px;line-height:26px;font-weight:600;margin:6px 0 16px}
+h3{font-size:13px;line-height:18px;font-weight:600;margin:20px 0 8px;color:var(--muted)}
+button{font:600 13px/18px inherit;font-family:inherit;border-radius:4px;padding:8px 16px;cursor:pointer;min-height:36px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,label:focus-within{outline:2px solid var(--focus);outline-offset:2px}
+.primary{background:var(--accent);color:#fff;border:1px solid var(--accent)}.secondary{background:var(--surface);color:var(--text);border:1px solid var(--border-strong)}
+.close{background:none;border:1px solid var(--border-strong);padding:6px 12px}
+/* comparison: stacked by default; 3 columns only when each column >= 200px after padding/gaps */
+.cmp{display:grid;gap:12px;grid-template-columns:1fr}
+@container panel (min-width: 680px){.cmp{grid-template-columns:repeat(3,minmax(200px,1fr))}}
+.ans{border:1px solid var(--border);background:var(--subtle);border-radius:8px;padding:12px;max-width:68ch}
+.ans b{display:block;font-size:13px;line-height:18px;color:var(--muted);margin-bottom:4px}
+.cov{font-size:13px;line-height:18px;color:var(--muted);margin-top:12px}
+.radios{display:flex;gap:8px;flex-wrap:wrap}
+.radios label{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:4px;padding:8px 12px;min-height:36px;cursor:pointer}
+.radios label.sel{border:2px solid var(--accent);background:var(--accent-s)}
+.radios input{width:16px;height:16px;accent-color:var(--accent)}
+.cls{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:3px 10px;font-size:13px;line-height:18px;font-weight:600}
+.conflict{background:var(--att-s);color:var(--att)}
+.choice{display:grid;gap:10px}
+.opt{border:1px solid var(--border-strong);border-radius:8px;padding:12px 14px}
+.opt.sel{border:2px solid var(--accent)}
+.opt legend,.opt .t{font-weight:600}
+.field{display:grid;gap:4px;margin-top:10px}.field label{font-size:13px;line-height:18px;font-weight:600}
+input[type=text],textarea{font:inherit;border:1px solid var(--border-strong);border-radius:4px;padding:8px 10px;width:100%;background:#fff}
+.req{font-weight:400;color:var(--muted)}
+.meta{font-size:13px;line-height:18px;color:var(--muted)}
+.warn{color:var(--att);font-weight:600;font-size:13px;line-height:18px;display:flex;gap:6px;align-items:center;margin-top:8px}
+.rec{border:1px solid var(--border);border-radius:8px;padding:14px;background:var(--subtle)}
+.lockline{display:flex;gap:6px;align-items:center;font-weight:600}
+.locked{font-size:13px;line-height:18px;color:var(--muted);margin-top:6px}
+.dlg-scrim{position:fixed;inset:0;background:rgba(28,35,40,.4);display:none;align-items:center;justify-content:center}
+.dlg{background:#fff;border-radius:10px;max-width:480px;padding:24px;box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.dlg h2{margin-top:0}.dlg .btns{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.state{display:none}
+@media (max-width:1100px){.layout{grid-template-columns:1fr}.list{display:none}aside{border-left:none;box-shadow:none}}
+body[data-s="open"] .s-open,body[data-s="resolve"] .s-resolve,body[data-s="resolved"] .s-resolved{display:block}
+body[data-s="resolve"] .dlg-scrim{display:flex}
+</style></head><body data-s="open">
+<div class="note">
+ <span>UX reference mockup B (S3a review panel) · fictional data · not production code. Resize the window: the comparison stacks when three columns can't each be at least 200px wide.</span>
+ <fieldset><legend>Mockup state:</legend>
+  <label><input type="radio" name="s" value="open" checked> Conflict · Open</label>
+  <label><input type="radio" name="s" value="resolve"> Recording resolution</label>
+  <label><input type="radio" name="s" value="resolved"> Resolved (final)</label>
+ </fieldset>
+</div>
+<div class="layout">
+ <div class="list" aria-hidden="true">
+  <div class="mini">Q1 · Revealed · Locked · <b>Aligned</b> · 3 of 3</div>
+  <div class="mini current">Q2 · Revealed · Locked · <b>Conflict</b> · reviewing</div>
+  <div class="mini">Q3 · Revealed · Locked · <b>Aligned · 2 of 3 substantive answers</b></div>
+  <div class="mini">Q4 · Hidden · follow-up question</div>
+ </div>
+ <aside aria-labelledby="ptitle" role="region">
+  <div class="ph"><div class="eyebrow"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Q2 · Revealed · Locked</div><button class="close">Close</button></div>
+  <h2 id="ptitle">A monthly customer cancels on day 20 of 30. What refund do they get?</h2>
+
+  <h3>Answers</h3>
+  <div class="cmp">
+   <div class="ans"><b>Product</b>Pro-rated refund for the remaining 10 days, calculated to the day.</div>
+   <div class="ans"><b>Development</b>No refund. Cancellation takes effect at the end of the current billing period.</div>
+   <div class="ans"><b>QA</b>Full refund of the month's payment, since the service is cancelled immediately.</div>
+  </div>
+  <div class="cov">Coverage: 3 of 3 submitted (3 substantive).</div>
+
+  <h3>Classification (your judgement after discussion)</h3>
+  <div class="state s-open s-resolve" role="radiogroup" aria-label="Classification">
+   <div class="radios">
+    <label><input type="radio" name="c"> Aligned</label>
+    <label class="sel"><input type="radio" name="c" checked> Conflict</label>
+    <label><input type="radio" name="c"> Unanswered</label>
+   </div>
+   <div style="margin-top:10px"><button class="secondary">Save classification</button></div>
+   <div class="meta" style="margin-top:6px">You can change this until a final resolution is recorded.</div>
+  </div>
+  <div class="state s-resolved"><span class="cls conflict">◆ Conflict</span><div class="locked">Locked by resolution.</div></div>
+
+  <!-- Open -->
+  <div class="state s-open">
+   <h3>Resolution</h3>
+   <div class="choice">
+    <fieldset class="opt sel"><legend><input type="radio" name="r" checked> Keep open</legend>
+     <div class="field"><label for="fo">Follow-up owner <span class="req">(required to be complete)</span></label><input id="fo" type="text" value="Maya Chen"></div>
+     <div class="meta" style="margin-top:6px">Open · Follow-up: Maya Chen</div>
+    </fieldset>
+    <fieldset class="opt"><legend><input type="radio" name="r"> Record final resolution</legend><div class="meta">Use only when an authorised decision has actually been made.</div></fieldset>
+   </div>
+   <div class="warn" style="display:none">⚠ Incomplete: no follow-up owner.</div>
+  </div>
+
+  <!-- Recording resolution (form + dialog) -->
+  <div class="state s-resolve">
+   <h3>Resolution</h3>
+   <fieldset class="opt sel"><legend><input type="radio" name="r2" checked> Record final resolution</legend>
+    <div class="field"><label for="rs">Resolution <span class="req">(required)</span></label><textarea id="rs" rows="2">Pro-rated refund for the remaining days, calculated to the day.</textarea></div>
+    <div class="field"><label for="dn">Decision owner name <span class="req">(required, as reported by you)</span></label><input id="dn" type="text" value="Daniel Okafor"></div>
+    <div class="field"><label for="dr">Decision owner role <span class="req">(required)</span></label><input id="dr" type="text" value="Head of Billing"></div>
+    <div class="meta" style="margin-top:10px">Recorded by: Maya Chen (facilitator), added automatically.</div>
+    <div style="margin-top:12px"><button class="primary">Record final resolution…</button></div>
+   </fieldset>
+  </div>
+
+  <!-- Resolved -->
+  <div class="state s-resolved">
+   <h3>Resolution</h3>
+   <div class="rec">
+    <div class="lockline"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Resolved (final)</div>
+    <p style="margin:8px 0">Pro-rated refund for the remaining days, calculated to the day.</p>
+    <div class="meta">Decision owner (as reported): Daniel Okafor, Head of Billing</div>
+    <div class="meta">Recorded by: Maya Chen (facilitator)</div>
+    <div class="meta" style="margin-top:8px">This resolution can't be edited or reopened in this version. To revisit it, add a follow-up question.</div>
+   </div>
+  </div>
+ </aside>
+</div>
+
+<div class="dlg-scrim"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dt" aria-describedby="dd">
+ <h2 id="dt">Record final resolution?</h2>
+ <p id="dd">This decision cannot be edited or reopened in this version. To revisit it, add a follow-up question.</p>
+ <div class="meta">Decision owner (as reported): Daniel Okafor, Head of Billing · Recorded by: you</div>
+ <div class="btns"><button class="secondary" autofocus>Cancel</button><button class="primary">Record final resolution</button></div>
+</div></div>
+<script>
+document.querySelectorAll('.note input').forEach(r=>r.addEventListener('change',e=>{document.body.dataset.s=e.target.value}));
+</script>
+</body></html>

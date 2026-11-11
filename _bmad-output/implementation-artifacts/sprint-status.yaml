@@ -1,0 +1,68 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 11-10-2026 12:00
+last_updated: "11-11-2026 01:30"
+project: bmad-masterclass
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+# Approved implementation PRIORITY order (user, 2026-11-10). This is priority only; story dependencies and MVP scope are unchanged:
+#   1) Epic 1  2) Epic 2  3) Story 3.1  4) Epic 4  5) Stories 3.2, 3.3
+# Retrospectives are optional (solo developer); no estimates or ceremonies.
+development_status:
+  epic-1: in-progress
+  1-1-deployable-project-foundation-from-the-starter-template: review
+  1-2-create-an-alignment-session-and-save-the-one-time-access-lin: backlog
+  1-3-add-questions-to-an-alignment-session: backlog
+  1-4-answer-questions-independently-with-enforced-privacy: backlog
+  1-5-reveal-a-question-and-lock-its-answers: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-compare-revealed-answers-in-the-review-panel: backlog
+  2-2-classify-a-revealed-question-with-an-explicit-save: backlog
+  2-3-keep-an-item-open-with-a-named-follow-up-owner: backlog
+  2-4-record-a-final-resolution-with-reported-attribution: backlog
+  2-5-view-and-copy-the-decision-summary: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-add-a-follow-up-question-after-questions-are-revealed: backlog
+  3-2-edit-or-remove-a-question-only-while-permitted: backlog
+  3-3-assign-or-replace-a-participant-with-a-new-one-time-link: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-open-a-per-visitor-fictional-demo: backlog
+  4-2-switch-between-fictional-people-under-the-same-rules: backlog
+  4-3-reset-the-demo-and-clean-up-old-demos: backlog
+  4-4-polished-2-3-minute-demo-walkthrough: backlog
+  epic-4-retrospective: optional

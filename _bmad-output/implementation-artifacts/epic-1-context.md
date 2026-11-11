@@ -1,0 +1,62 @@
+# Epic 1 Context: Independent answers with private, per-question reveal
+
+<!-- Compiled from planning artifacts. Edit freely. Regenerate with compile-epic-context if planning docs change. -->
+
+## Goal
+
+Deliver the core slice of the product: a facilitator creates an alignment session for a user story and receives one-time access links for Product, Development and QA; each participant answers questions privately; before reveal everyone sees only Submitted / Not submitted per perspective; the facilitator reveals questions one at a time (including partial and zero-submission reveals), which irreversibly locks that question and shows its coverage. This epic proves independent answers, server-enforced privacy and per-question reveal, and lays the deployable foundation (stack, security headers, CI, test harnesses) every later epic builds on. Nothing is implemented yet; no customer validation has been conducted.
+
+## Stories
+
+- Story 1.1: Deployable project foundation from the starter template
+- Story 1.2: Create an alignment session and save the one-time access links
+- Story 1.3: Add questions to an alignment session
+- Story 1.4: Answer questions independently with enforced privacy
+- Story 1.5: Reveal a question and lock its answers
+
+## Requirements & Constraints
+
+- **Session creation:** story title required, description optional; creator becomes sole facilitator. At most one person per perspective (Product, Development, QA); facilitator may hold zero or one; perspectives may stay unassigned (shown as Not submitted). Display names unique per session, case-insensitive.
+- **Access:** each grant is reached through a distinct role-tied identity; an actor with no role sees nothing. All denial cases return one identical response with no session details.
+- **Questions:** anyone with a role can add a question at any time; it starts Hidden, author recorded, numbered sequentially per session. Optional prompts (boundaries, failures, permissions, exclusions) never required.
+- **Responses:** one per perspective per question; either a non-empty answer or Can't answer (optional reason), stored as distinct types. Editable (including type switch) only while Hidden. No withdrawal, no deletion.
+- **Privacy (highest-stakes rule):** before reveal only the author sees a response's content; everyone else, including a facilitator holding another perspective, sees only Submitted / Not submitted, never content, reason or response type, through any interface (HTML, RSC payload, action results, errors, titles, screen-reader text, counts). Enforced at data access, not in the UI. Privacy holds per credential, not per verified human (accepted bearer-link trade-off).
+- **Reveal:** facilitator only, one question at a time, irreversible, affects only that question; locks it against any new or edited response, including Not-submitted perspectives. Revealed questions show coverage "{n} of 3 submitted" with names of missing perspectives.
+- **Verification:** automated tests must attempt to retrieve hidden content/type as every other role through every interface; edge cases (zero submissions, all Can't answer, concurrent reveal/submit) are tested. Accessibility target WCAG 2.2 AA (no conformance claim unless verified). Desktop browser only. No real personal data.
+- Story 1.1 sets up tooling only; it must not claim privacy, concurrency or accessibility tests pass.
+
+## Technical Decisions
+
+- **Repo/tooling:** app lives in `alignment-app/` subfolder; npm; Node 22 LTS+. Scaffold with `create-next-app@16.4.x` (TypeScript, App Router), pin versions. Drizzle ORM (`node-postgres` adapter) + `pg` Pool created once in module scope and registered with `attachDatabasePool`; Vercel Node runtime with Fluid compute (no Edge). Vitest, Playwright, @axe-core/playwright. CSS Modules + global CSS custom properties from DESIGN.md tokens; inline SVG icons; no UI framework. Dependabot or Renovate.
+- **Databases:** local dev/tests use Postgres 16 via Homebrew; CI uses a Postgres service container; production is Neon. Keep the same major version across environments (confirm Neon's default matches 16). App uses pooled `DATABASE_URL` (PgBouncer transaction mode: no session-level `SET`, advisory locks, SQL `PREPARE` or `LISTEN`; only `SET LOCAL`); migrations use `DATABASE_URL_UNPOOLED`. Other env: `SESSION_SECRET`, `APP_ORIGIN`.
+- **Production migrations (binding decision, 2026-11-10 — supersedes the architecture's "migrate in the Vercel build when `VERCEL_ENV=production`"):** migrations are NOT run automatically in Vercel builds. Use a controlled, single-run step: a manually triggered GitHub Actions `workflow_dispatch` job, or an explicit npm script run against `DATABASE_URL_UNPOOLED`. Migrations must stay backward compatible with the previous deployment. CI applies migrations to its own database before tests and needs no production secrets.
+- **Layering:** `app/` + `proxy.ts` (interface; `'use server'` only here; never imports `src/server/db`) → `src/server/access/` (token hash, `cookie.ts`, `resolveActor`) → `src/server/domain/` (commands, queries, `visibility.ts`, `coverage.ts`, `errors.ts`) → `src/server/db/` (schema, custom SQL migrations, repositories). `src/ui/` consumes view-model types only. Lint bans `'use cache'`, `unstable_cache`, `force-cache`, `'use server'` outside `app/`, and `db` imports from `app/`.
+- **Interface registry:** every page, route handler and exported server action is listed in `src/server/interfaces.ts`; a CI test fails on missing or stale entries. Leak tests iterate this registry.
+- **Actor resolution:** every interface calls `resolveActor(sessionId)` → `Actor { grantId, sessionId, isFacilitator, perspective | null, isDemo, displayName }`, then only domain commands/queries. No client-supplied role, grant, perspective or response id is trusted.
+- **Access links:** 256-bit random token, only SHA-256 hash stored; link `{APP_ORIGIN}/access/{token}`. Tokens returned only in the issuing response, never logged, cached, or placed in any other URL or web storage. `GET /access/{token}` sets cookie and `303`s to `/s/{sessionId}` with `Referrer-Policy: no-referrer`, `Cache-Control: no-store`, `X-Robots-Tag: noindex`; token is reusable until revoked. Create action sets the facilitator's cookie and does not redirect.
+- **Cookie:** `rg_<sessionId>`, `Path=/s/<sessionId>`, HttpOnly, Secure, SameSite=Lax, Max-Age 30 days, value = HMAC(`SESSION_SECRET`) of `{grantId, sessionId}`. Only `access/cookie.ts` reads/writes it. Opening another link for the same session replaces the cookie.
+- **Commands:** one DB transaction each: lock session row (`FOR UPDATE` for session-level e.g. add question with numbering; `FOR SHARE` for question-level) → question row `FOR UPDATE` → re-resolve grant → checks in order: authorised → target `session_id` matches (`NO_ACCESS`) → state preconditions → content-dependent checks → conditional writes (1 affected row). Return `{ ok: true, … }` or `{ ok: false, code }` with typed codes (e.g. `NO_ACCESS`, `NOT_FACILITATOR`, `NOT_AUTHOR`, `STALE_ROLE`, `QUESTION_REVEALED`, `DUPLICATE_PERSON`); no raw DB errors reach the UI. Mutation forms carry `expected_grant_id`; mismatch → `STALE_ROLE`.
+- **Visibility:** all response reads go through `visibility.ts`. Hidden questions read from a `response_status` SQL view with no content/type columns; revealed questions from a revealed-only view. The Hidden view-model type has no content, type or substantive-count field. Coverage computed only from projection output; counts never stored.
+- **Database guards (custom SQL migrations):** state ∈ {hidden, revealed}, no revealed → hidden; no response insert/update on revealed questions; no response deletes (demo deletion path comes later in Epic 4).
+- **Data model (Epic 1 tables):** snake_case singular. `alignment_session` (id, story_title, story_description, is_demo, demo_owner_key_hash, created_at); `access_grant` (id, session_id, display_name, is_facilitator, perspective nullable, token_hash nullable, revoked_at; unique `(session_id, perspective)`, one facilitator grant per session); `question` (id, session_id, number, text, author_grant_id, state, revealed_at; later columns added by Epic 2/3); `response` (id, question_id, perspective, author_grant_id, type `answer|cant_answer`, content, reason, updated_at; composite FK `(author_grant_id, perspective)`, unique `(question_id, perspective)`). UUIDv7 ids; `timestamptz` UTC. Enums: `question_state`, `response_type`, `perspective` (`product|development|qa`).
+- **No caching:** `next.config` `cacheComponents: false` and Partial Prefetching disabled; session routes `dynamic = 'force-dynamic'`; links `prefetch={false}`; responses `Cache-Control: private, no-store`; mutations re-render via `refresh()`/`revalidatePath`; no client store of session data.
+- **Web surface:** nonce-based CSP in `proxy.ts` (`script-src 'self' 'nonce-…' 'strict-dynamic'`, `frame-ancestors 'none'`), `Referrer-Policy: strict-origin-when-cross-origin` (except `/access/*`); no third-party scripts, analytics or font CDNs; Inter via `next/font`. Logs never contain tokens, request bodies or response content.
+- **Testing:** domain unit tests; integration tests against real Postgres (success and failure paths, cross-session `NO_ACCESS`); DB guard tests via direct SQL; canary leak test and byte-identical differential leak test; concurrency tests (concurrent adds, reveal ∥ submit); Playwright e2e with header assertions; axe checks. CI on every push/PR; branch protection on `main`.
+
+## UX & Interaction Patterns
+
+- Surfaces: S1 Start (Create alignment session · Open demo, demo not functional yet); S2 create form + Access links panel; S3 workspace (header with story title, "You: {roles}" indicator, question cards in creation order); Access denied page ("You don't have access to this alignment session.").
+- Access links panel: one row per issued grant (role, name, full link, Copy link); unassigned note; persistent warning "These access links are shown only once. Save them now. If lost, they cannot be recovered."; Continue always enabled, but confirms if not every link was copied; links never re-shown after leaving or reload.
+- Cards: Hidden card shows "Q{n} · Hidden · answers stay private until revealed" with closed-eye icon; status pills "{Perspective}: Submitted / Not submitted" only. When the facilitator holds a perspective, "Your answer, as {Perspective}" zone sits above a separate "Facilitator" zone. Revealed card: "Revealed · Locked" with lock icon, full answers, Can't answer label + reason, dashed labelled Not-submitted slot (never collapsed), "Coverage: {n} of 3 submitted" + breakdown.
+- Response editor: Answer (non-empty) or Can't answer (optional reason), switchable while Hidden; Submit → submitted view with Edit; no withdraw. Rejected-after-reveal copy: "Q{n} was revealed by the facilitator, so your change wasn't saved. Answers are locked after reveal."
+- Reveal dialog "Reveal Q{n}?" names missing perspectives or the zero-submission case; per-question only, no bulk reveal.
+- Dialogs: focus to heading, trapped, Esc cancels and returns focus; confirm never default focus. Focus after actions: new question → its card; submit → Edit button; reveal → card heading; links panel → its heading. Polite live-region announcements (e.g. "Q2 revealed. 3 of 3 submitted."), never containing hidden content or type.
+- Visual/a11y: DESIGN.md tokens as CSS custom properties, light mode only; desktop at 1280×800, min 1024px, workspace ≈760px, no horizontal scroll; visible 2px focus ring; targets ≥24×24px; text + icon, never colour alone; neutral tone (never "agreed", "approved", "verified").
+
+## Cross-Story Dependencies
+
+- 1.1 is the foundation for all stories (stack, lint rules, CSP, registry test, CI, migration workflow, test harnesses).
+- 1.2 creates `alignment_session`, `access_grant`, the cookie and `resolveActor`; 1.3–1.5 depend on it. Story 3.3 later converts grant uniqueness to partial indexes over non-revoked grants.
+- 1.3 creates `question`; 1.4 adds `response`, the status-only view and response guards; 1.5 adds the revealed-only view and the no-un-reveal trigger.
+- Every new interface must be added to the registry so leak tests cover it; privacy is re-verified in Epics 2 and 4.
+- Epic 2 (classification, resolution, summary) builds on revealed questions and coverage; Epic 4 (demo) reuses these rules unchanged and adds the only deletion path.

@@ -1,0 +1,15 @@
+# Local-only BMAD material (kept on disk, never published).
+# Personal brainstorming sessions and their memlogs
+/_bmad-output/brainstorming/
+# Superseded K5 product brief
+/_bmad-output/planning-artifacts/briefs/brief-bmad-masterclass-2026-11-10/
+# Discovery records with private workplace observations / firsthand anecdotes
+/_bmad-output/planning-artifacts/research/evidence-log.md
+/_bmad-output/planning-artifacts/research/interview-tracker.md
+/_bmad-output/planning-artifacts/research/r3-*.md
+# Scratch and working files
+/_bmad-output/planning-artifacts/briefs/*/.brief-draft-*.md
+/_bmad-output/planning-artifacts/ux-designs/*/.working/
+
+# OS noise
+.DS_Store

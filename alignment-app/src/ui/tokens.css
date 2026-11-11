@@ -1,0 +1,76 @@
+/*
+ * Design tokens from DESIGN.md (UX-DR1). Light mode only.
+ * Source of truth: _bmad-output/planning-artifacts/ux-designs/ux-bmad-masterclass-2026-11-10/DESIGN.md
+ */
+:root {
+  color-scheme: light;
+
+  /* Colors */
+  --color-canvas: #f4f6f7;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f7f9fa;
+  --color-border: #d5dbdf; /* decorative only (1.4:1) */
+  --color-border-strong: #7a858d; /* control boundaries, dashed Not submitted */
+  --color-text: #1c2328;
+  --color-text-muted: #4d5861;
+  --color-accent: #0b6b57;
+  --color-accent-hover: #09584a;
+  --color-accent-subtle: #e6f2ef;
+  --color-on-accent: #ffffff;
+  --color-attention: #8a4b0f;
+  --color-attention-subtle: #fbefe3;
+  --color-error: #a61b1b;
+  --color-demo: #5c4400;
+  --color-demo-subtle: #fff4d6;
+  --color-focus: #1d4ed8;
+  --color-scrim: #1c2328;
+
+  /* Typography */
+  --font-family-ui: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --type-page-title-size: 24px;
+  --type-page-title-weight: 600;
+  --type-page-title-line: 32px;
+  --type-section-title-size: 18px;
+  --type-section-title-weight: 600;
+  --type-section-title-line: 26px;
+  --type-question-size: 16px;
+  --type-question-weight: 600;
+  --type-question-line: 24px;
+  --type-body-size: 15px;
+  --type-body-weight: 400;
+  --type-body-line: 24px;
+  --type-answer-size: 15px;
+  --type-answer-weight: 400;
+  --type-answer-line: 24px;
+  --type-label-size: 13px;
+  --type-label-weight: 600;
+  --type-label-line: 18px;
+  --type-meta-size: 13px;
+  --type-meta-weight: 400;
+  --type-meta-line: 18px;
+
+  /* Radii */
+  --rounded-sm: 4px;
+  --rounded-md: 8px;
+  --rounded-lg: 10px;
+  --rounded-full: 9999px;
+
+  /* Spacing (4px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --reading-measure: 68ch;
+  --panel-min: 600px;
+  --panel-max: 760px;
+  --column-min: 200px;
+
+  /* Focus ring */
+  --focus-ring-color: var(--color-focus);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+}
