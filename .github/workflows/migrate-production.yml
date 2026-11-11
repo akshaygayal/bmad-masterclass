@@ -1,0 +1,56 @@
+name: Migrate production
+
+# The single controlled path for production migrations: never inside a Vercel
+# build (user decision, 2026-11-10). Migrations are merged to main, then
+# applied once here. Each must be backward compatible with the version deployed
+# before it (expand first, contract later).
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "migrate production" to confirm'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: migrate-production
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Attach required reviewers and the DATABASE_URL_UNPOOLED secret to this
+    # GitHub Environment in the repository settings.
+    environment: production
+    defaults:
+      run:
+        working-directory: alignment-app
+    steps:
+      - name: Check confirmation and branch
+        working-directory: .
+        env:
+          CONFIRM: ${{ github.event.inputs.confirm }}
+          REF: ${{ github.ref }}
+        run: |
+          if [ "$CONFIRM" != "migrate production" ]; then
+            echo "::error::Confirmation must be exactly \"migrate production\"."
+            exit 1
+          fi
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "::error::Production migrations run only from main (got $REF)."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: alignment-app/.nvmrc
+          cache: npm
+          cache-dependency-path: alignment-app/package-lock.json
+      - run: npm ci
+      - name: Apply migrations to production
+        run: npm run db:migrate:prod -- --yes-production
+        env:
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}

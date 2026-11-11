@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Q2 refund story · Alignment session (UX mockup A)</title>
+<style>
+:root{--canvas:#F4F6F7;--surface:#FFFFFF;--subtle:#F7F9FA;--border:#D5DBDF;--border-strong:#7A858D;--text:#1C2328;--muted:#4D5861;--accent:#0B6B57;--accent-h:#09584A;--accent-s:#E6F2EF;--att:#8A4B0F;--att-s:#FBEFE3;--focus:#1D4ED8}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);font:400 15px/24px Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.note{background:#fff;border-bottom:1px solid var(--border);padding:8px 24px;font-size:13px;line-height:18px;color:var(--muted)}
+header.app{background:var(--surface);border-bottom:1px solid var(--border)}
+.hwrap{max-width:808px;margin:0 auto;padding:20px 24px;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+h1{font-size:24px;line-height:32px;font-weight:600;margin:0}.sub{font-size:13px;line-height:18px;color:var(--muted);margin-top:4px}
+a{color:var(--accent)}a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+main{max-width:808px;margin:0 auto;padding:24px;display:grid;gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px}
+.state{display:flex;align-items:center;gap:6px;font-size:13px;line-height:18px;font-weight:600;color:var(--muted)}
+.state svg{width:16px;height:16px}.qn{color:var(--text)}
+.q{font-size:16px;line-height:24px;font-weight:600;margin:8px 0 14px}
+.meta{font-size:13px;line-height:18px;color:var(--muted)}
+.zone{border-radius:8px;padding:14px 16px;margin-top:12px}
+.zone h3{margin:0 0 8px;font-size:13px;line-height:18px;font-weight:600}
+.you{background:var(--subtle);border:1px solid var(--border)}
+.fac{border:1px solid var(--border-strong);background:var(--surface)}
+.myans{font-size:15px;line-height:24px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 2px}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border-strong);border-radius:9999px;padding:2px 10px;font-size:13px;line-height:18px}
+.pill svg{width:14px;height:14px}
+.btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+button{font:600 13px/18px inherit;font-family:inherit;border-radius:4px;padding:8px 16px;cursor:pointer;min-height:36px}
+.primary{background:var(--accent);color:#fff;border:1px solid var(--accent)}.primary:hover{background:var(--accent-h)}
+.secondary{background:var(--surface);color:var(--text);border:1px solid var(--border-strong)}
+.textbtn{background:none;border:none;color:var(--accent);padding:8px 4px}
+.answers{display:grid;gap:10px;margin-top:4px}
+.ans{border:1px solid var(--border);background:var(--subtle);border-radius:8px;padding:10px 12px}
+.ans b{display:block;font-size:13px;line-height:18px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.ans.ns{background:var(--surface);border:1px dashed var(--border-strong);color:var(--muted)}
+.cls{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:3px 10px;font-size:13px;line-height:18px;font-weight:600}
+.cls svg{width:14px;height:14px}.aligned{background:var(--accent-s);color:var(--accent)}
+.covline{margin-top:6px}
+.cant{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.follow{display:inline-block;font-size:13px;line-height:18px;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:1px 8px;margin-left:8px}
+.add{display:flex;justify-content:flex-start}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style></head><body>
+<div class="note">UX reference mockup A (S3 alignment session workspace) · fictional data · not production code. Viewer: <b>Maya Chen</b>, facilitator, also holding the <b>Product</b> perspective (a normal session, so there's no demo banner or role switcher).</div>
+<header class="app"><div class="hwrap">
+ <div><h1>Customers can cancel a subscription and receive a refund</h1>
+ <div class="sub">Alignment session · You: Facilitator and Product · Development: Arjun Rao · QA: Lena Novak</div></div>
+ <a href="#">Decision summary</a>
+</div></header>
+<main aria-label="Questions">
+
+<!-- Q2 Hidden: own answer + facilitator zone -->
+<article class="card" aria-labelledby="q2">
+ <div class="state"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8s2.5-4 6-4 6 4 6 4-2.5 4-6 4-6-4-6-4zm1 6L13 2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="qn">Q2</span> · Hidden · answers stay private until revealed</div>
+ <h2 class="q" id="q2">A monthly customer cancels on day 20 of 30. What refund do they get?</h2>
+ <section class="zone you" aria-label="Your answer, as Product">
+  <h3>Your answer, as Product</h3>
+  <div class="myans">Pro-rated refund for the remaining 10 days, calculated to the day.</div>
+  <div class="btns"><button class="secondary">Edit answer</button></div>
+  <div class="meta" style="margin-top:8px">Only you can see this answer until the question is revealed.</div>
+ </section>
+ <section class="zone fac" aria-label="Facilitator">
+  <h3>Facilitator</h3>
+  <div class="meta">Response status</div>
+  <div class="row">
+   <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Product: Submitted</span>
+   <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Development: Submitted</span>
+   <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>QA: Submitted</span>
+  </div>
+  <div class="btns"><button class="primary">Reveal Q2…</button></div>
+ </section>
+</article>
+
+<!-- Q3 Revealed, partial coverage, Aligned -->
+<article class="card" aria-labelledby="q3">
+ <div class="state"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="qn">Q3</span> · Revealed · Locked</div>
+ <h2 class="q" id="q3">Cancellation fails because the payment provider is down. What does the customer see?</h2>
+ <div class="answers">
+  <div class="ans"><b>Product</b>An error message explaining the problem, with a retry option.</div>
+  <div class="ans"><b>Development</b>Show "Something went wrong" and let them try again.</div>
+  <div class="ans ns"><b>QA</b>Not submitted</div>
+ </div>
+ <div style="margin-top:12px"><span class="cls aligned"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Aligned · 2 of 3 substantive answers</span></div>
+ <div class="meta covline">Product and Development describe the same behaviour. QA: Not submitted.</div>
+ <div class="meta">Coverage: 2 of 3 submitted · QA: Not submitted</div>
+ <div class="meta">Same behaviour described. Not a judgement of correctness.</div>
+ <section class="zone fac" aria-label="Facilitator" style="padding:10px 16px"><h3 style="margin-bottom:0">Facilitator</h3><div class="btns" style="margin-top:6px"><button class="secondary">Review</button></div></section>
+</article>
+
+<!-- Q4 follow-up Hidden: own Can't answer -->
+<article class="card" aria-labelledby="q4">
+ <div class="state"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8s2.5-4 6-4 6 4 6 4-2.5 4-6 4-6-4-6-4zm1 6L13 2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="qn">Q4</span> · Hidden · answers stay private until revealed <span class="follow">Follow-up question · added by Lena Novak</span></div>
+ <h2 class="q" id="q4">What happens if the customer cancels during the free trial?</h2>
+ <section class="zone you" aria-label="Your answer, as Product">
+  <h3>Your answer, as Product</h3>
+  <div class="cant"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h6" stroke="currentColor" stroke-width="1.5"/></svg>Can't answer</div>
+  <div class="meta">Reason: trial rules are owned by Billing.</div>
+  <div class="btns"><button class="secondary">Edit or change to an answer</button></div>
+ </section>
+ <section class="zone fac" aria-label="Facilitator">
+  <h3>Facilitator</h3>
+  <div class="row">
+   <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Product: Submitted</span>
+   <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Development: Submitted</span>
+   <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>QA: Submitted</span>
+  </div>
+  <div class="meta">Submitted shows only that a response exists. Its content and type stay hidden until reveal.</div>
+  <div class="btns"><button class="primary">Reveal Q4…</button></div>
+ </section>
+</article>
+
+<div class="add"><button class="secondary">+ Add question</button></div>
+</main>
+</body></html>
